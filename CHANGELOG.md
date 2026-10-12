@@ -7,6 +7,18 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-10-13
+
+### Fixed
+
+- Release pipeline: Homebrew, Scoop and winget steps now skip themselves when
+  their secrets are not set instead of failing the release.
+- CI: tests run on current stable Go so macOS test binaries load (Go 1.22
+  omitted LC_UUID); Go 1.22 remains the supported minimum.
+- CI: line endings are forced to LF so the Windows gofmt check passes.
+
+## [0.1.0] - 2026-10-12
+
 ### Added
 
 - Single static binary for Linux, Windows and macOS (amd64 and arm64).
@@ -34,4 +46,6 @@ and this project follows [Semantic Versioning](https://semver.org/).
   deb, rpm and apk packages.
 - No network access and no telemetry.
 
-[Unreleased]: https://github.com/web-pruthvi-sigmasolve/ccswitch/commits/main
+[Unreleased]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/tag/v0.1.0
