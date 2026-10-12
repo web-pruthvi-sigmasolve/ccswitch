@@ -7,7 +7,7 @@ A short guide for contributors. The full spec is in `PLAN.md`.
 - One static Go binary for Linux, Windows and macOS.
 - Two front-ends (TUI and CLI) over one core.
 - The risky logic (planning, merging) is pure and easy to test.
-- No network, no telemetry. Backup before every write.
+- No telemetry. The only network use is the optional once-a-day version check and `ccswitch update` downloads, both in `internal/update`. Backup before every write.
 
 ## Package map
 
@@ -101,7 +101,7 @@ bucket's existing files, else the source file.
 4. Unreadable entries are listed as unreadable and never copied or merged.
 5. Only `local_*.json` files are touched. Never `scheduled-tasks.json`.
 6. Never print or log tokens, emails or file contents.
-7. No network calls. A lock file prevents two runs at once.
+7. No network calls outside `internal/update` (version check and self-update). A lock file prevents two runs at once.
 
 ## Adding a screen to the TUI
 

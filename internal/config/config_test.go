@@ -102,3 +102,19 @@ func TestMigrateLegacyLabels(t *testing.T) {
 		t.Errorf("missing file = %v", m)
 	}
 }
+
+func TestUpdateCheckRoundTrip(t *testing.T) {
+	dir := t.TempDir()
+	c, err := Load(dir)
+	if err != nil || c.UpdateCheck != "" {
+		t.Fatalf("default = %+v, %v", c, err)
+	}
+	c.UpdateCheck = UpdateCheckOff
+	if err := c.Save(dir); err != nil {
+		t.Fatal(err)
+	}
+	got, err := Load(dir)
+	if err != nil || got.UpdateCheck != UpdateCheckOff {
+		t.Fatalf("round trip = %+v, %v", got, err)
+	}
+}

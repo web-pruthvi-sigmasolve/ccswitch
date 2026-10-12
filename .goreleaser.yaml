@@ -130,7 +130,7 @@ winget:
     description: >-
       ccswitch makes Claude Code chats visible in another signed-in Claude Desktop
       account. You pick the chats. It backs up before every write and has an undo.
-      No network access and no telemetry.
+      No telemetry; the only network use is an optional version check.
     publisher_url: https://github.com/web-pruthvi-sigmasolve
     publisher_support_url: https://github.com/web-pruthvi-sigmasolve/ccswitch/issues
     homepage: https://github.com/web-pruthvi-sigmasolve/ccswitch
@@ -216,7 +216,9 @@ release:
   footer: |
     ---
 
-    **Privacy:** ccswitch makes no network requests and sends no telemetry.
+    **Privacy:** ccswitch sends no telemetry. Its only network use is an
+    optional once-a-day version check against GitHub (turn it off with
+    `ccswitch update --disable-check`) and the downloads made by `ccswitch update`.
     It reads and writes only your local Claude data folders and its own
     config and backup folder. It backs up every file before changing it,
     and `ccswitch undo` restores the last backup.

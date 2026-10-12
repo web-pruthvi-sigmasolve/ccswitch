@@ -25,7 +25,18 @@ type Config struct {
 	BackupRetention int `json:"backupRetention"`
 	// ASCII forces ASCII-only glyphs in the TUI.
 	ASCII bool `json:"ascii"`
+	// UpdateCheck is "auto" (the default, also when empty) to allow the daily
+	// version check, or "off" to disable it.
+	UpdateCheck string `json:"updateCheck"`
 }
+
+// Values of Config.UpdateCheck.
+const (
+	// UpdateCheckAuto allows the once-a-day version check.
+	UpdateCheckAuto = "auto"
+	// UpdateCheckOff disables the version check.
+	UpdateCheckOff = "off"
+)
 
 const configFileName = "config.json"
 

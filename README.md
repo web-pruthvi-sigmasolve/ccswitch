@@ -12,7 +12,7 @@ Claude Desktop shows Claude Code chats per account. Sign in to a different accou
 - You choose which chats to move.
 - It never overwrites blindly. Conflicts are detected and shown.
 - It backs up every file before writing. `ccswitch undo` restores it.
-- No network. No telemetry. Nothing is ever deleted.
+- No telemetry. The only network use is an optional once-a-day version check against GitHub, which you can turn off. Nothing is ever deleted.
 
 ![ccswitch demo](docs/demo.gif)
 
@@ -73,6 +73,43 @@ Needs Go 1.22 or newer.
 
 Get the archive for your system from the [releases page](https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/latest). Files are named `ccswitch_<version>_<os>_<arch>`. Check it against `checksums.txt`, unpack it and put `ccswitch` on your PATH. `.deb`, `.rpm` and `.apk` packages are there too.
 
+## Updating
+
+```sh
+ccswitch update            # check, then ask before installing
+ccswitch update --check    # only check
+```
+
+`ccswitch update` downloads the release archive for your system from GitHub Releases, verifies its SHA-256 checksum against `checksums.txt`, and replaces the running program. Nothing is changed if the checksum does not match. Use `--yes` to skip the question (needed outside a terminal) and `--version v0.2.0` to install a specific version.
+
+If you installed with a package manager, `ccswitch update` prints the right command instead of replacing the file:
+
+| Installed with | Update with |
+|---|---|
+| Homebrew | `brew upgrade ccswitch` |
+| Scoop | `scoop update ccswitch` |
+| winget | `winget upgrade ccswitch.ccswitch` |
+| `.deb` / `.rpm` | `sudo apt upgrade ccswitch` / `sudo dnf upgrade ccswitch` |
+| `go install` | `go install github.com/web-pruthvi-sigmasolve/ccswitch/cmd/ccswitch@latest` |
+
+### The version check
+
+Interactive commands do a quiet background check at most once every 24 hours. If a newer version exists, one line is printed on stderr after the command finishes:
+
+```
+ccswitch 0.2.0 is available (you have 0.1.1). Run: ccswitch update
+```
+
+What is sent: one HTTPS `GET` to `https://api.github.com/repos/web-pruthvi-sigmasolve/ccswitch/releases/latest`. The only headers are `User-Agent: ccswitch/<version>` and `Accept`. There is no account, machine or usage data. The request has a 3 second timeout, never delays or fails a command, and the answer is cached in `update-check.json` in the ccswitch config folder. After a failed attempt it waits an hour before trying again.
+
+The check never runs in development builds, when stderr is not a terminal, with `--json` or `--quiet`, or when `CI` is set. To turn it off:
+
+- `ccswitch update --disable-check` (saved in the config; `--enable-check` turns it back on)
+- `CCSWITCH_NO_UPDATE_CHECK=1` in your environment
+- `--no-update-check` for a single run
+
+`ccswitch version` shows the last known latest version without using the network. `ccswitch doctor` shows whether the check is on.
+
 ## Usage
 
 ### The guided way
@@ -100,7 +137,8 @@ Keys: `enter` next, `esc` back, `q` quit, `?` shows or hides the full key list, 
 | `ccswitch label <uuid\|n> "<name>"` | Give an account a readable name. `ccswitch label --clear <uuid\|n>` removes it. |
 | `ccswitch undo [--list \| --set <id>]` | Restore the last backup, list backups, or restore a chosen one. Supports `--dry-run` and `--yes`. |
 | `ccswitch doctor` | Print store paths, candidates, versions and permissions. Use it in bug reports. |
-| `ccswitch version` | Print the version. |
+| `ccswitch update [--check] [--yes] [--version vX.Y.Z]` | Check for a newer release and install it. `--enable-check` and `--disable-check` turn the daily background check on or off. |
+| `ccswitch version` | Print the version, and the latest known version if a check has run. |
 | `ccswitch completion bash\|zsh\|fish\|powershell` | Print a shell completion script. |
 
 An account can be given as its number in `ccswitch list`, a full UUID, a unique UUID prefix (6 or more characters) or its name.
@@ -114,6 +152,7 @@ Options for every command:
 | `--json` | Machine-readable output for `list`, `chats`, `sync` and `undo --list`. |
 | `--no-color`, `--ascii` | Plain output. `NO_COLOR` is honoured too. |
 | `--quiet` | Hide notes and progress lines. |
+| `--no-update-check` | Skip the background version check for this run. |
 
 `sync` options:
 
@@ -228,7 +267,7 @@ More guarantees:
 - **Atomic writes.** Each file is written to a temp file and renamed. After writing, ccswitch re-reads the file. If it does not parse, the backup is restored.
 - **No deletes, ever.** ccswitch never deletes chats or transcripts. The only thing it removes is its own oldest backup sets, once there are more than 20.
 - **Account settings stay put.** Destination-owned fields such as connector settings and last-focused time are kept. Unknown fields are kept.
-- **No network, no telemetry.** ccswitch only reads and writes local files. It never starts or stops Claude Desktop.
+- **No telemetry, and almost no network.** ccswitch reads and writes local files. The only network use is the optional once-a-day version check and the `ccswitch update` download, both from GitHub and described in [Updating](#updating). Downloads are verified against a SHA-256 checksum. ccswitch never starts or stops Claude Desktop.
 
 ## Troubleshooting
 
@@ -262,7 +301,10 @@ No. Transcripts are shared on your machine already. Only the small sidebar entri
 Not yet. Export and import bundles are planned for v0.2.
 
 **Does it touch my account or tokens?**
-No. It never reads or writes tokens, cookies or credentials, and it makes no network requests.
+No. It never reads or writes tokens, cookies or credentials. See the next question for the network.
+
+**Does it touch the network?**
+Only for updates. Once a day, at most, an interactive run asks GitHub for the latest release number (no data about you is sent beyond a `ccswitch/<version>` User-Agent), and `ccswitch update` downloads a release from GitHub. Turn the check off with `ccswitch update --disable-check` or `CCSWITCH_NO_UPDATE_CHECK=1`. It does not run in CI, in pipes, or in development builds. Nothing else uses the network, and there is no telemetry.
 
 **Will a Claude Desktop update break it?**
 Unknown fields are preserved, so new app versions should keep working. If something changes, `ccswitch doctor` shows what it found. Please open an issue with that output.
@@ -276,7 +318,7 @@ make lint
 make test
 ```
 
-Use Conventional Commit messages (`feat:`, `fix:`, `docs:`). Everything that writes needs a `--dry-run` branch. Do not add network calls. See also [SECURITY.md](SECURITY.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+Use Conventional Commit messages (`feat:`, `fix:`, `docs:`). Everything that writes needs a `--dry-run` branch. Do not add network calls beyond the update check and `ccswitch update`. See also [SECURITY.md](SECURITY.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 ## Licence
 

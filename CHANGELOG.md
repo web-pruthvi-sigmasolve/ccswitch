@@ -7,6 +7,21 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Optional update check: at most once every 24 hours, an interactive run asks
+  GitHub for the latest release and prints a one-line notice on stderr. It sends
+  only a `ccswitch/<version>` User-Agent, never runs in CI, pipes, `--json`,
+  `--quiet` or dev builds, and can be turned off with
+  `ccswitch update --disable-check`, `CCSWITCH_NO_UPDATE_CHECK=1` or
+  `--no-update-check`.
+- `ccswitch update` (`--check`, `--yes`, `--version`, `--enable-check`,
+  `--disable-check`): downloads the release, verifies its SHA-256 checksum and
+  replaces the binary, or prints the right command for Homebrew, Scoop, winget,
+  Linux packages and `go install`.
+- `ccswitch version` shows the last known latest version; `ccswitch doctor`
+  shows the state of the update check.
+
 ## [0.1.1] - 2026-10-13
 
 ### Fixed

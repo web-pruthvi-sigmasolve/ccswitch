@@ -16,6 +16,7 @@ import (
 
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/update"
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/version"
 )
 
@@ -59,17 +60,37 @@ type env struct {
 	userData, configDir         string
 	json, noColor, ascii, quiet bool
 
+	// version is the running version (version.Version; tests override it).
+	version string
+	// stderrTTY reports whether stderr is a terminal.
+	stderrTTY bool
+	// noUpdateCheck is the --no-update-check flag.
+	noUpdateCheck bool
+	// updateAPI and updateDL override the GitHub API and download origins
+	// (test hooks; empty means the real ones).
+	updateAPI, updateDL string
+	// exePath overrides how the running executable is found (test hook).
+	exePath func() (string, error)
+
+	// checker is the background update check of this run, if one started.
+	checker *update.Checker
+	// noticeDone makes sure the update notice prints at most once.
+	noticeDone bool
+
 	app *app.App
 }
 
 // newEnv builds the environment for a run from the given streams.
 func newEnv(in io.Reader, out, errw io.Writer) *env {
-	e := &env{in: in, out: out, errw: errw, getenv: os.Getenv, goos: runtime.GOOS, now: time.Now}
+	e := &env{in: in, out: out, errw: errw, getenv: os.Getenv, goos: runtime.GOOS, now: time.Now, version: version.Version}
 	if f, ok := in.(*os.File); ok {
 		e.stdinTTY = IsTerminal(f)
 	}
 	if f, ok := out.(*os.File); ok {
 		e.stdoutTTY = IsTerminal(f)
+	}
+	if f, ok := errw.(*os.File); ok {
+		e.stderrTTY = IsTerminal(f)
 	}
 	return e
 }
@@ -158,10 +179,12 @@ func (e *env) run(args []string) int {
 	root.SetOut(e.out)
 	root.SetErr(e.errw)
 	err := root.Execute()
-	if err == nil {
-		return exitOK
+	code := exitOK
+	if err != nil {
+		code = e.report(err)
 	}
-	return e.report(err)
+	e.showUpdateNotice()
+	return code
 }
 
 // report prints err for the user and returns the exit code.
@@ -203,7 +226,9 @@ func newRoot(e *env) *cobra.Command {
 		Short: "Move Claude Code chats between Claude Desktop accounts safely",
 		Long: `ccswitch makes Claude Code chats visible in another signed-in Claude Desktop
 account. It never overwrites blindly, backs up every file before writing, and
-can undo the last change. No network, no telemetry.`,
+can undo the last change. No telemetry. The only network use is an optional
+once-a-day version check against GitHub (turn it off with
+"ccswitch update --disable-check").`,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Version:       version.String(),
@@ -223,6 +248,8 @@ can undo the last change. No network, no telemetry.`,
 	pf.BoolVar(&e.noColor, "no-color", false, "disable colour (NO_COLOR is also honoured)")
 	pf.BoolVar(&e.ascii, "ascii", false, "use ASCII symbols only")
 	pf.BoolVar(&e.quiet, "quiet", false, "print less: no notes or progress lines")
+	pf.BoolVar(&e.noUpdateCheck, "no-update-check", false, "do not check for a newer version in this run")
+	root.PersistentPreRun = func(cmd *cobra.Command, args []string) { e.startUpdateCheck(cmd) }
 
 	root.AddCommand(
 		newListCmd(e),
@@ -232,6 +259,7 @@ can undo the last change. No network, no telemetry.`,
 		newLabelCmd(e),
 		newUndoCmd(e),
 		newDoctorCmd(e),
+		newUpdateCmd(e),
 		newVersionCmd(e),
 	)
 	return root
@@ -244,6 +272,7 @@ func newVersionCmd(e *env) *cobra.Command {
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fmt.Fprintln(e.out, version.String())
+			e.printCachedLatest()
 			return nil
 		},
 	}

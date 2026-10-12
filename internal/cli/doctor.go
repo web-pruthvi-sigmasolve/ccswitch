@@ -55,6 +55,7 @@ It never prints chat contents, emails or tokens. It works even without a store.`
 				{"version", version.String()},
 				{"os/arch", runtime.GOOS + "/" + runtime.GOARCH},
 				{"go", runtime.Version()},
+				{"update check", e.updateCheckSummary(a.Config, a.ConfigDir)},
 			}
 			chosen := st.UserData
 			if a.StoreErr != nil {

@@ -41,6 +41,8 @@ type Deps struct {
 	Lock func() (release func(), err error)
 	// Now is a test hook; the default is time.Now.
 	Now func() time.Time
+	// Update supplies "new version available" info; nil turns the feature off.
+	Update UpdateSource
 }
 
 // screen is one step of the flow. Screens move around by returning a command
@@ -81,6 +83,9 @@ type shared struct {
 	applyErr           error
 	prompted           map[string]bool // accounts already offered a label this session
 	quitRequested      bool            // ctrl+c arrived while applying
+	update             *UpdateStatus   // newer release known, nil otherwise
+	updateOpen         bool            // detail box is open
+	extra              int             // lines used above the help bar by the update notice
 }
 
 func (sh *shared) now() time.Time {
@@ -204,21 +209,43 @@ func (sh *shared) recalc(showHelp bool) {
 	if showHelp {
 		lines = 7
 	}
-	sh.avail = max(sh.height-lines, 5)
+	sh.avail = max(sh.height-lines-sh.extra, 5)
 }
 
 // Init implements tea.Model.
-func (m Model) Init() tea.Cmd { return m.cur.Init() }
+func (m Model) Init() tea.Cmd {
+	cmd := m.sh.initUpdate()
+	m.syncLayout()
+	return tea.Batch(m.cur.Init(), cmd)
+}
+
+// syncLayout reserves room for the update notice on the current screen.
+func (m Model) syncLayout() {
+	m.sh.extra = m.updateLines()
+	m.sh.recalc(m.showHelp)
+}
 
 // Update implements tea.Model.
 func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	next, cmd := m.update(msg)
+	if nm, ok := next.(Model); ok {
+		nm.syncLayout()
+	}
+	return next, cmd
+}
+
+func (m Model) update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.sh.width, m.sh.height = msg.Width, msg.Height
 		m.help.Width = msg.Width
 		m.sh.recalc(m.showHelp)
+	case updateMsg:
+		m.sh.setUpdate(msg.s)
+		return m, nil
 	case gotoMsg:
 		m.cur = msg.s
+		m.syncLayout()
 		return m, m.cur.Init()
 	case tea.KeyMsg:
 		if msg.String() == "ctrl+c" {
@@ -229,6 +256,9 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			var cmd tea.Cmd
 			m.cur, cmd = m.cur.Update(msg)
 			return m, cmd
+		}
+		if m.handleUpdateKey(msg.String()) {
+			return m, nil
 		}
 		if c, ok := m.cur.(capturer); msg.String() == "?" && !(ok && c.capturing()) {
 			m.showHelp = !m.showHelp
@@ -251,7 +281,12 @@ func (m Model) View() string {
 	if h, ok := m.cur.(helper); ok {
 		keys = h.helpKeys()
 	}
+	keys = withUpdateKey(keys, sh.update != nil && m.updateKeysScreen())
 	m.help.ShowAll = m.showHelp
-	body := m.cur.View() + "\n" + m.help.View(keys)
+	body := m.cur.View() + "\n"
+	if u := m.updateView(); u != "" {
+		body += u + "\n"
+	}
+	body += m.help.View(keys)
 	return sh.st.finalize(body)
 }

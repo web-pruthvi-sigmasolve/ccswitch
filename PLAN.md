@@ -70,9 +70,13 @@ Why Go over Rust/TypeScript/Python for this product:
 - `ccswitch <command> …` → non-interactive CLI for scripts, CI, and users who
   prefer flags. Also what runs when stdout is not a TTY.
 
-**Zero network, zero telemetry.** Reads/writes only the local Claude data
-folders and its own config/backup folder. This is a hard product rule and
-will be stated in the README; trust is the moat.
+**No telemetry; one optional network call.** Reads/writes only the local
+Claude data folders and its own config/backup folder. The single exception is
+the once-a-day version check against GitHub Releases (added after v0.1.1): no
+identifying data, 3-second timeout, background only, never in CI or pipes,
+off with one setting. `ccswitch update` downloads release archives from
+GitHub and verifies their SHA-256. Both are stated in the README and
+SECURITY.md; trust is the moat.
 
 ---
 
@@ -334,8 +338,9 @@ needs the broader **session manager** scope (v0.3), where the audience is every
 Claude Code user. Concrete levers, cheapest first:
 
 1. **README that sells in 10 seconds**: a 15-second terminal GIF (made with
-   `vhs`), one-line install for each OS, and the privacy line "no network,
-   no telemetry, backup before every write".
+   `vhs`), one-line install for each OS, and the privacy line "no telemetry,
+   backup before every write, the only network use is an optional version
+   check you can turn off".
 2. **Install friction → zero**: `curl -fsSL …/install.sh | sh`,
    `irm …/install.ps1 | iex`, `brew install`, `scoop install`, `winget install`,
    `go install`.

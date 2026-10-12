@@ -2,7 +2,8 @@
 
 ## What ccswitch reads and writes
 
-ccswitch is a local tool. It makes no network requests and sends no telemetry.
+ccswitch is a local tool. It sends no telemetry. Its only network use is the
+update check and `ccswitch update`, described under **Network** below.
 
 **Reads**
 
@@ -26,6 +27,32 @@ ccswitch is a local tool. It makes no network requests and sends no telemetry.
 - It never touches `scheduled-tasks.json`, transcripts, tokens, cookies or credentials.
 - It never starts or kills Claude Desktop.
 - It never prints tokens, emails or file contents.
+
+## Network
+
+Two endpoints are ever contacted, both only for updates:
+
+1. `https://api.github.com/repos/web-pruthvi-sigmasolve/ccswitch/releases/latest`:
+   the version check. One `GET` at most every 24 hours (and not again for an hour
+   after a failure), 3 second timeout, run in the background. The only headers
+   are `User-Agent: ccswitch/<version>` and `Accept: application/vnd.github+json`.
+   Nothing about you or your chats is sent. The result is cached in
+   `update-check.json` in the ccswitch config folder. It is skipped in dev
+   builds, in CI (`CI` set), when stderr is not a terminal, with `--json` or
+   `--quiet`, and when turned off (`ccswitch update --disable-check`,
+   `CCSWITCH_NO_UPDATE_CHECK=1` or `--no-update-check`).
+2. `https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/download/...`:
+   downloads made by `ccswitch update` (the release archive and `checksums.txt`).
+   Redirects are followed only to GitHub's own download hosts over HTTPS.
+
+`ccswitch update` verifies the archive's SHA-256 against `checksums.txt` from the
+same release before extracting anything. It extracts only the `ccswitch` binary
+from the archive root (entries with a path, `..` or a link are rejected, size
+capped at 200 MB), writes it next to the current program and swaps it in with a
+rename. On any failure the installed program is left untouched. Note that
+`checksums.txt` is served from the same release as the archive, so this
+protects against corrupt or tampered downloads but not against a compromised
+release; verify releases yourself if that is in your threat model.
 
 ## Supported versions
 
