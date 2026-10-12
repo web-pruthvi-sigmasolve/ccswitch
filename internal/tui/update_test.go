@@ -62,13 +62,17 @@ func TestUpdateNoticeAbsentWhenNotAvailable(t *testing.T) {
 
 func TestUpdateNoticeOnAccountsAndDoneNotApply(t *testing.T) {
 	m := updModel(t, &fakeUpdate{cached: newer, cachedOK: true}, false)
-	if !strings.Contains(m.View(), "↑ "+noticeText+" · run: ccswitch update") {
-		t.Fatalf("notice missing on accounts:\n%s", m.View())
+	// Glyphs (arrow, separator) differ between Unicode and ASCII mode, and
+	// ASCII is auto-enabled on Windows CI, so match only the OS-neutral text.
+	v := m.View()
+	if !strings.Contains(v, noticeText) || !strings.Contains(v, "ccswitch update") {
+		t.Fatalf("notice missing on accounts:\n%s", v)
 	}
-	// Notice sits directly above the help bar.
-	lines := strings.Split(strings.TrimRight(m.View(), "\n"), "\n")
-	if !strings.Contains(lines[len(lines)-2], noticeText) {
-		t.Fatalf("notice is not directly above the help bar: %q", lines[len(lines)-2])
+	// Notice sits directly above the help bar (last line).
+	lines := strings.Split(strings.TrimRight(v, "\n"), "\n")
+	if len(lines) < 2 || !strings.Contains(lines[len(lines)-2], noticeText) ||
+		!strings.Contains(lines[len(lines)-2], "ccswitch update") {
+		t.Fatalf("notice is not directly above the help bar:\n%s", v)
 	}
 	done := newDoneScreen(m.sh)
 	m.cur = done

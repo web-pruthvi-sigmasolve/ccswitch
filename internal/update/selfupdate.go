@@ -453,13 +453,21 @@ func writeLimited(dst string, r io.Reader, limit int64) error {
 // replaceExe moves newPath over exe. On Windows a running executable cannot
 // be overwritten but can be renamed, so it is moved aside first.
 func replaceExe(newPath, exe string) error {
-	if runtime.GOOS != "windows" {
+	return replaceExeFor(runtime.GOOS == "windows", newPath, exe)
+}
+
+// replaceExeFor is replaceExe with the Windows behaviour chosen by the caller,
+// so tests can exercise it on any OS.
+func replaceExeFor(windows bool, newPath, exe string) error {
+	if !windows {
 		if err := os.Rename(newPath, exe); err != nil {
 			return fmt.Errorf("replacing %s: %w", exe, err)
 		}
 		return nil
 	}
 	old := exe + oldSuffix
+	// A stale "<exe>.ccswitch-old" (two updates before a restart) would make
+	// the rename below fail on Windows, where the target must not exist.
 	_ = os.Remove(old)
 	if err := os.Rename(exe, old); err != nil {
 		return fmt.Errorf("moving the running program aside: %w", err)

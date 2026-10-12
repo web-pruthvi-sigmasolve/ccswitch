@@ -211,20 +211,41 @@ func TestRefreshIgnoresInterval(t *testing.T) {
 }
 
 func TestTimeout(t *testing.T) {
+	// The handler blocks until the test ends. Cleanups run last-in first-out,
+	// so the channel is closed before srv.Close, which waits for handlers.
+	release := make(chan struct{})
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		select {
+		case <-release:
 		case <-r.Context().Done():
-		case <-time.After(2 * time.Second):
 		}
 	}))
-	defer srv.Close()
-	c := New(Options{ConfigDir: t.TempDir(), Current: "0.1.1", BaseURL: srv.URL, Getenv: noEnv, Timeout: 50 * time.Millisecond})
+	t.Cleanup(srv.Close)
+	t.Cleanup(func() { close(release) })
+
+	newSlow := func() *Checker {
+		return New(Options{ConfigDir: t.TempDir(), Current: "0.1.1", BaseURL: srv.URL, Getenv: noEnv, Timeout: 200 * time.Millisecond})
+	}
+
+	// Explicit refresh.
 	start := time.Now()
-	if _, err := c.Refresh(context.Background()); err == nil {
+	if _, err := newSlow().Refresh(context.Background()); err == nil {
 		t.Error("expected a timeout error")
 	}
-	if time.Since(start) > time.Second {
-		t.Error("timeout not honoured")
+	if d := time.Since(start); d > 1500*time.Millisecond {
+		t.Errorf("Refresh: timeout not honoured, took %v", d)
+	}
+
+	// Background check: Result must give up on the timeout, long before its
+	// own 2s wait, and report nothing because no answer arrived.
+	c := newSlow()
+	start = time.Now()
+	c.Start()
+	if s, ok := c.Result(2 * time.Second); ok {
+		t.Errorf("unexpected status %+v", s)
+	}
+	if d := time.Since(start); d > 1500*time.Millisecond {
+		t.Errorf("Start/Result: timeout not honoured, took %v", d)
 	}
 }
 

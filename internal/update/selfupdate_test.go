@@ -15,6 +15,7 @@ import (
 	"net/http/httptest"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -180,6 +181,36 @@ func assertNoLeftovers(t *testing.T, exe string) {
 	}
 }
 
+func assertGone(t *testing.T, path string) {
+	t.Helper()
+	if _, err := os.Stat(path); !errors.Is(err, fs.ErrNotExist) {
+		t.Errorf("%s should not exist (err %v)", path, err)
+	}
+}
+
+// TestReplaceExeWindowsStaleOld checks the Windows move-aside path (run with
+// the windows flag on every OS): a leftover .ccswitch-old from an earlier
+// update must not make a second update fail.
+func TestReplaceExeWindowsStaleOld(t *testing.T) {
+	exe := writeExe(t, "V1")
+	old := exe + oldSuffix
+	if err := os.WriteFile(old, []byte("STALE"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	newPath := exe + newSuffix
+	if err := os.WriteFile(newPath, []byte("V2"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := replaceExeFor(true, newPath, exe); err != nil {
+		t.Fatalf("replaceExeFor: %v", err)
+	}
+	assertContent(t, exe, "V2")
+	assertContent(t, old, "V1")
+	assertGone(t, newPath)
+	CleanupOld(exe)
+	assertGone(t, old)
+}
+
 func TestApplyTarGz(t *testing.T) {
 	const name = "ccswitch_0.2.0_linux_amd64.tar.gz"
 	archive := makeTarGz(t,
@@ -197,6 +228,16 @@ func TestApplyTarGz(t *testing.T) {
 		t.Fatalf("Apply = %q, %v", ver, err)
 	}
 	assertContent(t, exe, "NEW BINARY")
+	assertGone(t, exe+dlSuffix)
+	assertGone(t, exe+newSuffix)
+	old := exe + oldSuffix
+	if runtime.GOOS == "windows" {
+		// By design the running exe is moved aside; CleanupOld removes it on
+		// the next start.
+		assertContent(t, old, "OLD BINARY")
+		CleanupOld(exe)
+	}
+	assertGone(t, old)
 	assertNoLeftovers(t, exe)
 	if runtimeUnix() {
 		fi, _ := os.Stat(exe)
