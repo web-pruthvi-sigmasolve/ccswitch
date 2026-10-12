@@ -7,10 +7,10 @@ import (
 	"github.com/charmbracelet/bubbles/spinner"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/ccswitch/ccswitch/internal/apply"
-	"github.com/ccswitch/ccswitch/internal/backup"
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/apply"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 type (

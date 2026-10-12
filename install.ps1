@@ -3,7 +3,7 @@
   ccswitch installer for Windows (PowerShell 5.1 and 7).
 
 .DESCRIPTION
-  irm https://raw.githubusercontent.com/ccswitch/ccswitch/main/install.ps1 | iex
+  irm https://raw.githubusercontent.com/web-pruthvi-sigmasolve/ccswitch/main/install.ps1 | iex
 
   Environment:
     CCSWITCH_VERSION   Version to install, for example v0.1.0. Default: latest release.
@@ -16,7 +16,7 @@
 $ErrorActionPreference = 'Stop'
 $ProgressPreference = 'SilentlyContinue'
 
-$Repo = 'ccswitch/ccswitch'
+$Repo = 'web-pruthvi-sigmasolve/ccswitch'
 $Bin = 'ccswitch.exe'
 
 try {

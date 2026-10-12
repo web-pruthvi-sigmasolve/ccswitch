@@ -6,12 +6,12 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ccswitch/ccswitch/internal/app"
-	"github.com/ccswitch/ccswitch/internal/apply"
-	"github.com/ccswitch/ccswitch/internal/backup"
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/plan"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/apply"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 type syncFlags struct {

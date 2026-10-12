@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/store"
-	"github.com/ccswitch/ccswitch/internal/testutil"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 const (

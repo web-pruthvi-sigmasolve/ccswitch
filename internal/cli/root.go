@@ -14,9 +14,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ccswitch/ccswitch/internal/app"
-	"github.com/ccswitch/ccswitch/internal/store"
-	"github.com/ccswitch/ccswitch/internal/version"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/version"
 )
 
 // Exit codes (PLAN.md section 3.8).

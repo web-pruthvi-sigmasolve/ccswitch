@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 func entry(dir, id string, activity, focused int64, extra string) *store.Entry {

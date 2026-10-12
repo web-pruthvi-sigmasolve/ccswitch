@@ -12,8 +12,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // Label is the resolved identity of one account.

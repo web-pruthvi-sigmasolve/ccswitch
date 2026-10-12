@@ -11,9 +11,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/identity"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/identity"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // HintError is an error for the user: one plain sentence plus an optional

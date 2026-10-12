@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/ccswitch/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
 )
 
 // staleAfter is how old a lock file must be to be replaced regardless of pid.

@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ccswitch/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
 )
 
 const maxLabelLen = 64

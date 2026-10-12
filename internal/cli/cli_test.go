@@ -10,11 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ccswitch/ccswitch/internal/backup"
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/merge"
-	"github.com/ccswitch/ccswitch/internal/store"
-	"github.com/ccswitch/ccswitch/internal/testutil"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/merge"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 const (

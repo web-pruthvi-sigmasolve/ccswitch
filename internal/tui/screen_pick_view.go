@@ -6,8 +6,8 @@ import (
 
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/ccswitch/ccswitch/internal/plan"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // statusColW is the width of the right-hand status column.

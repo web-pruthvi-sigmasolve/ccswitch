@@ -1,4 +1,4 @@
-module github.com/ccswitch/ccswitch
+module github.com/web-pruthvi-sigmasolve/ccswitch
 
 go 1.22
 

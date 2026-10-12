@@ -8,8 +8,8 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/ccswitch/ccswitch/internal/plan"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // pickGroup is one project folder with its chats, newest first. Groups are

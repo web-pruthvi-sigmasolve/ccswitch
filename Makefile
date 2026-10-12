@@ -1,5 +1,5 @@
 BINARY  := ccswitch
-PKG     := github.com/ccswitch/ccswitch
+PKG     := github.com/web-pruthvi-sigmasolve/ccswitch
 MAIN    := ./cmd/ccswitch
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 COMMIT  ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo none)

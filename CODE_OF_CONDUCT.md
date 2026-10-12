@@ -33,7 +33,7 @@ behaviour they judge inappropriate.
 ## Reporting
 
 Report problems privately through the **Security** tab of
-`github.com/ccswitch/ccswitch` (private reporting) or by contacting a
+`github.com/web-pruthvi-sigmasolve/ccswitch` (private reporting) or by contacting a
 maintainer directly. All reports are reviewed and handled in confidence.
 
 ## Attribution

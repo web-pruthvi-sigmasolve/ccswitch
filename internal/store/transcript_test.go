@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ccswitch/ccswitch/internal/testutil"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 func TestEncodeCwd(t *testing.T) {

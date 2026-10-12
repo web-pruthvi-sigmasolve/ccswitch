@@ -8,8 +8,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/testutil"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 const (

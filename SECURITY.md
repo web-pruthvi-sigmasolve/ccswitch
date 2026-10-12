@@ -36,7 +36,7 @@ Only the latest release gets security fixes while the project is at v0.x.
 Please do not open a public issue for a security problem.
 
 Use GitHub private vulnerability reporting: go to the **Security** tab of
-`github.com/ccswitch/ccswitch` and choose **Report a vulnerability**.
+`github.com/web-pruthvi-sigmasolve/ccswitch` and choose **Report a vulnerability**.
 
 Include the version (`ccswitch version`), your OS, and steps to reproduce.
 We aim to reply within 7 days and to ship a fix for confirmed issues within 30 days.

@@ -1,7 +1,7 @@
 #!/bin/sh
 # ccswitch installer for Linux and macOS.
 #
-#   curl -fsSL https://raw.githubusercontent.com/ccswitch/ccswitch/main/install.sh | sh
+#   curl -fsSL https://raw.githubusercontent.com/web-pruthvi-sigmasolve/ccswitch/main/install.sh | sh
 #
 # Environment:
 #   CCSWITCH_VERSION      Version to install, for example v0.1.0. Default: latest release.
@@ -13,7 +13,7 @@
 
 set -eu
 
-REPO="ccswitch/ccswitch"
+REPO="web-pruthvi-sigmasolve/ccswitch"
 BIN="ccswitch"
 
 say() { printf '%s\n' "$*"; }

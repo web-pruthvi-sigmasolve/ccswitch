@@ -1,8 +1,8 @@
 package tui
 
 import (
-	"github.com/ccswitch/ccswitch/internal/plan"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 func (s *pickScreen) matchedEntries() []*store.Entry {

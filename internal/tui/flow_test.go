@@ -10,9 +10,9 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/ccswitch/ccswitch/internal/config"
-	"github.com/ccswitch/ccswitch/internal/plan"
-	"github.com/ccswitch/ccswitch/internal/testutil"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 func TestPickGroupsByProjectNewestFirst(t *testing.T) {

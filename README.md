@@ -1,9 +1,9 @@
 # ccswitch
 
-[![CI](https://github.com/ccswitch/ccswitch/actions/workflows/ci.yml/badge.svg)](https://github.com/ccswitch/ccswitch/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/ccswitch/ccswitch)](https://github.com/ccswitch/ccswitch/releases/latest)
-[![License: MIT](https://img.shields.io/github/license/ccswitch/ccswitch)](LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/ccswitch/ccswitch)](https://goreportcard.com/report/github.com/ccswitch/ccswitch)
+[![CI](https://github.com/web-pruthvi-sigmasolve/ccswitch/actions/workflows/ci.yml/badge.svg)](https://github.com/web-pruthvi-sigmasolve/ccswitch/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/web-pruthvi-sigmasolve/ccswitch)](https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/web-pruthvi-sigmasolve/ccswitch)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/web-pruthvi-sigmasolve/ccswitch)](https://goreportcard.com/report/github.com/web-pruthvi-sigmasolve/ccswitch)
 
 **Switch Claude Desktop accounts without losing your Claude Code chats.**
 
@@ -29,7 +29,7 @@ ccswitch copies the small index entries from one account to the other. You pick 
 ### Linux and macOS
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/ccswitch/ccswitch/main/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/web-pruthvi-sigmasolve/ccswitch/main/install.sh | sh
 ```
 
 Installs to `~/.local/bin` (override with `CCSWITCH_INSTALL_DIR`). Pick a version with `CCSWITCH_VERSION=v0.1.0`. For `/usr/local/bin` use `sh -s -- --system`. The script verifies the SHA-256 checksum before installing.
@@ -37,7 +37,7 @@ Installs to `~/.local/bin` (override with `CCSWITCH_INSTALL_DIR`). Pick a versio
 ### Windows (PowerShell)
 
 ```powershell
-irm https://raw.githubusercontent.com/ccswitch/ccswitch/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/web-pruthvi-sigmasolve/ccswitch/main/install.ps1 | iex
 ```
 
 Installs to `%LOCALAPPDATA%\Programs\ccswitch` and adds it to your user PATH. Pick a version with `$env:CCSWITCH_VERSION = "v0.1.0"` first.
@@ -45,13 +45,13 @@ Installs to `%LOCALAPPDATA%\Programs\ccswitch` and adds it to your user PATH. Pi
 ### Homebrew
 
 ```sh
-brew install ccswitch/tap/ccswitch
+brew install web-pruthvi-sigmasolve/tap/ccswitch
 ```
 
 ### Scoop
 
 ```powershell
-scoop bucket add ccswitch https://github.com/ccswitch/scoop-bucket
+scoop bucket add ccswitch https://github.com/web-pruthvi-sigmasolve/scoop-bucket
 scoop install ccswitch
 ```
 
@@ -64,14 +64,14 @@ winget install ccswitch.ccswitch
 ### Go
 
 ```sh
-go install github.com/ccswitch/ccswitch/cmd/ccswitch@latest
+go install github.com/web-pruthvi-sigmasolve/ccswitch/cmd/ccswitch@latest
 ```
 
 Needs Go 1.22 or newer.
 
 ### Manual download
 
-Get the archive for your system from the [releases page](https://github.com/ccswitch/ccswitch/releases/latest). Files are named `ccswitch_<version>_<os>_<arch>`. Check it against `checksums.txt`, unpack it and put `ccswitch` on your PATH. `.deb`, `.rpm` and `.apk` packages are there too.
+Get the archive for your system from the [releases page](https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/latest). Files are named `ccswitch_<version>_<os>_<arch>`. Check it against `checksums.txt`, unpack it and put `ccswitch` on your PATH. `.deb`, `.rpm` and `.apk` packages are there too.
 
 ## Usage
 

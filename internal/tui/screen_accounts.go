@@ -6,8 +6,8 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 
-	"github.com/ccswitch/ccswitch/internal/identity"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/identity"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // accountsScreen lets the user choose the source account.

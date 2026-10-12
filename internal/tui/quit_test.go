@@ -6,8 +6,8 @@ import (
 
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/ccswitch/ccswitch/internal/apply"
-	"github.com/ccswitch/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/apply"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
 )
 
 // isQuit reports whether cmd produces tea.QuitMsg.

@@ -8,10 +8,10 @@ import (
 	"io"
 	"os"
 
-	"github.com/ccswitch/ccswitch/internal/app"
-	"github.com/ccswitch/ccswitch/internal/cli"
-	"github.com/ccswitch/ccswitch/internal/tui"
-	"github.com/ccswitch/ccswitch/internal/version"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/cli"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/tui"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/version"
 )
 
 // tuiFlags are the global flags that may accompany interactive mode.

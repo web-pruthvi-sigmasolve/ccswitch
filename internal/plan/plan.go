@@ -9,8 +9,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/ccswitch/ccswitch/internal/merge"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/merge"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // Class describes how a source entry relates to the destination.

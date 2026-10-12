@@ -8,9 +8,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/ccswitch/ccswitch/internal/app"
-	"github.com/ccswitch/ccswitch/internal/backup"
-	"github.com/ccswitch/ccswitch/internal/config"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/config"
 )
 
 type backupJSON struct {

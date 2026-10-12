@@ -8,8 +8,8 @@ import (
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 
-	"github.com/ccswitch/ccswitch/internal/identity"
-	"github.com/ccswitch/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/identity"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
 )
 
 // labelScreen asks for a friendly name for one account.

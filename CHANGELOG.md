@@ -34,4 +34,4 @@ and this project follows [Semantic Versioning](https://semver.org/).
   deb, rpm and apk packages.
 - No network access and no telemetry.
 
-[Unreleased]: https://github.com/ccswitch/ccswitch/commits/main
+[Unreleased]: https://github.com/web-pruthvi-sigmasolve/ccswitch/commits/main

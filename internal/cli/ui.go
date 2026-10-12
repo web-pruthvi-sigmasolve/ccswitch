@@ -8,7 +8,7 @@ import (
 	"strings"
 	"unicode/utf8"
 
-	"github.com/ccswitch/ccswitch/internal/app"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/app"
 )
 
 // style is an ANSI text style.

@@ -13,10 +13,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ccswitch/ccswitch/internal/backup"
-	"github.com/ccswitch/ccswitch/internal/fsx"
-	"github.com/ccswitch/ccswitch/internal/merge"
-	"github.com/ccswitch/ccswitch/internal/plan"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/fsx"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/merge"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
 )
 
 // Options control Run.

@@ -47,7 +47,7 @@ The bash prototype proves this works. It is not shippable because:
 
 **Name**: `ccswitch` (Claude Code switch). Follows the `cc*` convention the
 community already knows (`ccusage` etc.). Module path placeholder
-`github.com/ccswitch/ccswitch`; rename with one `sed` once the GitHub org exists.
+`github.com/web-pruthvi-sigmasolve/ccswitch`; rename with one `sed` once the GitHub org exists.
 
 **Language**: **Go 1.22+**.
 Why Go over Rust/TypeScript/Python for this product:
