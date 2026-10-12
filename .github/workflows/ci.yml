@@ -10,18 +10,25 @@ permissions:
 
 jobs:
   test:
-    name: test (${{ matrix.os }}, go ${{ matrix.go }})
+    name: test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        go: ["1.22"]
     steps:
+      # Windows runners default to core.autocrlf=true, which checks out .go files
+      # with CRLF line endings and makes gofmt flag every file. .gitattributes
+      # already forces LF; this is belt and braces in case it is ever missed.
+      - name: Disable CRLF conversion
+        run: git config --global core.autocrlf false
       - uses: actions/checkout@v4
+      # Latest stable Go: Go 1.22 linkers omit LC_UUID, which current macOS
+      # dyld rejects (golang/go#68678). The min-go job keeps go.mod honest.
       - uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go }}
+          go-version: "stable"
+          check-latest: true
           cache: true
       - name: Build
         run: go build ./...
@@ -30,20 +37,22 @@ jobs:
       - name: Test
         run: go test ./... -race
       - name: gofmt check
-        if: runner.os != 'Windows'
-        run: |
-          out="$(gofmt -l .)"
-          if [ -n "$out" ]; then
-            echo "These files need gofmt:"
-            echo "$out"
-            exit 1
-          fi
-      - name: gofmt check (Windows)
-        if: runner.os == 'Windows'
-        shell: pwsh
-        run: |
-          $out = gofmt -l .
-          if ($out) { Write-Host "These files need gofmt:"; Write-Host $out; exit 1 }
+        if: runner.os == 'Linux'
+        run: test -z "$(gofmt -l .)" || { echo "These files need gofmt:"; gofmt -l .; exit 1; }
+
+  min-go:
+    name: test (ubuntu-latest, minimum go 1.22)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+      - name: Build
+        run: go build ./...
+      - name: Test
+        run: go test ./... -count=1
 
   goreleaser-check:
     name: goreleaser check
@@ -52,7 +61,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
-          go-version: "1.22"
+          go-version: "stable"
+          check-latest: true
       - uses: goreleaser/goreleaser-action@v6
         with:
           distribution: goreleaser
