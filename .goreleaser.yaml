@@ -75,6 +75,15 @@ nfpms:
       - src: README.md
         dst: /usr/share/doc/ccswitch/README.md
 
+# Publishing to package channels. Each channel is optional and is enabled
+# by its own repository secret (passed as an env var in release.yml):
+#   HOMEBREW_TAP_TOKEN -> homebrew_casks (web-pruthvi-sigmasolve/homebrew-tap)
+#   SCOOP_BUCKET_TOKEN -> scoops         (web-pruthvi-sigmasolve/scoop-bucket)
+#   WINGET_PKGS_TOKEN  -> winget         (PR to microsoft/winget-pkgs via fork)
+#   AUR_KEY            -> aurs           (ssh key for aur.archlinux.org)
+# When a secret is missing its env var is an empty string and that channel's
+# upload is skipped (the AUR pipe skips itself when private_key is empty).
+# skip_upload "auto" additionally skips pre-release versions.
 homebrew_casks:
   - name: ccswitch
     ids:
@@ -87,7 +96,7 @@ homebrew_casks:
     homepage: https://github.com/web-pruthvi-sigmasolve/ccswitch
     description: Move Claude Code chats between Claude Desktop accounts safely.
     license: MIT
-    skip_upload: auto
+    skip_upload: '{{ if eq .Env.HOMEBREW_TAP_TOKEN "" }}true{{ else }}auto{{ end }}'
     commit_author:
       name: goreleaserbot
       email: bot@goreleaser.com
@@ -111,7 +120,7 @@ scoops:
     homepage: https://github.com/web-pruthvi-sigmasolve/ccswitch
     description: Move Claude Code chats between Claude Desktop accounts safely.
     license: MIT
-    skip_upload: auto
+    skip_upload: '{{ if eq .Env.SCOOP_BUCKET_TOKEN "" }}true{{ else }}auto{{ end }}'
 
 winget:
   - name: ccswitch
@@ -147,7 +156,7 @@ winget:
           owner: microsoft
           name: winget-pkgs
           branch: master
-    skip_upload: auto
+    skip_upload: '{{ if eq .Env.WINGET_PKGS_TOKEN "" }}true{{ else }}auto{{ end }}'
 
 aurs:
   - name: ccswitch-bin

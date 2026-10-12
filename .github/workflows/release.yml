@@ -31,7 +31,12 @@ jobs:
           args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # Optional. When a secret is empty, GoReleaser skips that channel (skip_upload: auto).
+          # Optional package channels. Keep all four lines even before the
+          # secrets exist: a missing secret expands to an empty string, so the
+          # variable is always defined (the .goreleaser.yaml templates need it).
+          # Empty HOMEBREW_TAP_TOKEN / SCOOP_BUCKET_TOKEN / WINGET_PKGS_TOKEN make
+          # their skip_upload template evaluate to "true", so that channel is
+          # skipped. An empty AUR_KEY makes the AUR pipe skip itself.
           HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           SCOOP_BUCKET_TOKEN: ${{ secrets.SCOOP_BUCKET_TOKEN }}
           WINGET_PKGS_TOKEN: ${{ secrets.WINGET_PKGS_TOKEN }}
