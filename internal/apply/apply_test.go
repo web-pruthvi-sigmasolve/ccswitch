@@ -10,6 +10,7 @@ import (
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/backup"
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/plan"
 	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/store"
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 type env struct {
@@ -80,9 +81,7 @@ func TestAddCreatesExactBytes(t *testing.T) {
 	if got := read(t, dst); got != raw {
 		t.Fatalf("bytes differ: %s", got)
 	}
-	if st, _ := os.Stat(dst); st.Mode().Perm() != 0o600 {
-		t.Fatalf("mode %v", st.Mode())
-	}
+	testutil.WantPerm(t, dst, 0o600)
 	if _, err := os.Stat(dst + ".ccswitch-tmp"); !os.IsNotExist(err) {
 		t.Fatal("temp file left behind")
 	}
@@ -240,10 +239,10 @@ func TestCreatesBucketDirWhenAccountExists(t *testing.T) {
 	if err != nil || res.Applied != 1 {
 		t.Fatal(res, err)
 	}
-	st, err := os.Stat(e.dst.Path)
-	if err != nil || st.Mode().Perm() != 0o700 {
+	if st, err := os.Stat(e.dst.Path); err != nil || !st.IsDir() {
 		t.Fatalf("bucket dir: %v %v", st, err)
 	}
+	testutil.WantPerm(t, e.dst.Path, 0o700)
 }
 
 func TestSkipAndMixedEventSequence(t *testing.T) {

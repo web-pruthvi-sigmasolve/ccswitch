@@ -5,6 +5,8 @@ import (
 	"path/filepath"
 	"strings"
 	"testing"
+
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 func write(t *testing.T, p, s string) {
@@ -32,10 +34,11 @@ func TestRoundtripAndRestore(t *testing.T) {
 	if err := s.Commit(); err != nil {
 		t.Fatal(err)
 	}
-	st, err := os.Stat(filepath.Join(s.Dir, "acct", "org", "local_1.json"))
-	if err != nil || st.Mode().Perm() != 0o600 {
-		t.Fatalf("backup file: %v %v", st, err)
+	bak := filepath.Join(s.Dir, "acct", "org", "local_1.json")
+	if _, err := os.Stat(bak); err != nil {
+		t.Fatalf("backup file: %v", err)
 	}
+	testutil.WantPerm(t, bak, 0o600)
 
 	got, err := Latest(root)
 	if err != nil || got.ID != s.ID || got.Note != "test" || len(got.Files) != 1 || got.Files[0].SessionID != "local_1" || got.Files[0].Size != 7 {

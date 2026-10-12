@@ -75,7 +75,7 @@ nfpms:
       - src: README.md
         dst: /usr/share/doc/ccswitch/README.md
 
-brews:
+homebrew_casks:
   - name: ccswitch
     ids:
       - default
@@ -83,13 +83,22 @@ brews:
       owner: web-pruthvi-sigmasolve
       name: homebrew-tap
       token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
-    directory: Formula
+    directory: Casks
     homepage: https://github.com/web-pruthvi-sigmasolve/ccswitch
     description: Move Claude Code chats between Claude Desktop accounts safely.
     license: MIT
     skip_upload: auto
-    test: |
-      system "#{bin}/ccswitch", "version"
+    commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    # The binary is not signed or notarized, so clear the macOS quarantine flag.
+    hooks:
+      post:
+        install: |
+          if OS.mac?
+            system_command "/usr/bin/xattr",
+                           args: ["-dr", "com.apple.quarantine", "#{staged_path}/ccswitch"]
+          end
 
 scoops:
   - name: ccswitch

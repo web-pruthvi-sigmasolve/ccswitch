@@ -270,6 +270,12 @@ func TestReviewWarnsAboutDesktopAndOrgs(t *testing.T) {
 	}
 }
 
+// squash removes newlines and runs of spaces so that text hard-wrapped (and
+// re-indented) by the view can be searched as one string.
+func squash(s string) string {
+	return strings.Join(strings.Fields(s), "")
+}
+
 func TestApplyRunsRealPlanAndDoneShowsBackup(t *testing.T) {
 	f := newFixture(t)
 	m := toReview(t, f.model(t))
@@ -289,10 +295,15 @@ func TestApplyRunsRealPlanAndDoneShowsBackup(t *testing.T) {
 		t.Errorf("lock/release: %d/%d", locked, released)
 	}
 	v := done.View()
-	for _, want := range []string{"applied 4", "failed 0", "skipped 1", "Backup " + r.BackupSet.ID, r.BackupSet.Dir, "restart"} {
+	for _, want := range []string{"applied 4", "failed 0", "skipped 1", "Backup " + r.BackupSet.ID, "restart"} {
 		if !strings.Contains(v, want) {
 			t.Errorf("done lacks %q:\n%s", want, v)
 		}
+	}
+	// The Done screen hard-wraps long paths at the terminal width, so compare
+	// the folder path with newlines and indentation removed.
+	if !strings.Contains(squash(v), squash(r.BackupSet.Dir)) {
+		t.Errorf("done lacks backup folder %q:\n%s", r.BackupSet.Dir, v)
 	}
 	for _, id := range []string{"local_a1", "local_a5"} {
 		if _, err := os.Stat(filepath.Join(f.UserData, "claude-code-sessions", accB, orgX, id+".json")); err != nil {

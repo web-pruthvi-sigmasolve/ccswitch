@@ -29,8 +29,11 @@ func TestReadEntryFixture(t *testing.T) {
 	if string(e.Raw) != string(raw) || len(raw) == 0 || raw[len(raw)-1] == '\n' {
 		t.Errorf("raw mismatch or trailing newline")
 	}
-	if e.Mode.Perm() != 0o600 || e.ModTime.IsZero() {
-		t.Errorf("mode/mtime = %v %v", e.Mode, e.ModTime)
+	testutil.WantPerm(t, p, 0o600)
+	// The fixture sets mtime from LastActivityAt (2000 ms); compare at second
+	// precision because not every filesystem keeps sub-second timestamps.
+	if got := e.ModTime.Unix(); got != 2 {
+		t.Errorf("mtime = %v (unix %d), want unix 2", e.ModTime, got)
 	}
 	if e.Raw[0] != '{' {
 		t.Errorf("not single-line JSON")

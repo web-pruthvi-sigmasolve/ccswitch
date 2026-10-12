@@ -603,10 +603,7 @@ func TestUnarchive(t *testing.T) {
 	if strings.Join(jsonKeys(t, before), ",") != strings.Join(jsonKeys(t, after), ",") {
 		t.Fatal("key order changed")
 	}
-	info, _ := os.Stat(h.paths["work-archived"])
-	if info.Mode().Perm() != 0o600 {
-		t.Fatalf("mode = %v", info.Mode())
-	}
+	testutil.WantPerm(t, h.paths["work-archived"], 0o600)
 	sets, _ := backup.List(config.BackupDir(h.cfgDir))
 	if len(sets) != 1 || len(sets[0].Files) != 1 {
 		t.Fatalf("backup sets: %+v", sets)

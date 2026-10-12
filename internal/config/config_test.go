@@ -4,6 +4,8 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/web-pruthvi-sigmasolve/ccswitch/internal/testutil"
 )
 
 func TestDir(t *testing.T) {
@@ -55,13 +57,7 @@ func TestLoadDefaultsAndRoundtrip(t *testing.T) {
 	if err := c.Save(dir); err != nil {
 		t.Fatal(err)
 	}
-	fi, err := os.Stat(filepath.Join(dir, "config.json"))
-	if err != nil {
-		t.Fatal(err)
-	}
-	if fi.Mode().Perm() != 0o600 {
-		t.Errorf("mode = %v", fi.Mode())
-	}
+	testutil.WantPerm(t, filepath.Join(dir, "config.json"), 0o600)
 	ents, _ := os.ReadDir(dir)
 	if len(ents) != 1 {
 		t.Errorf("temp file left behind: %v", ents)
