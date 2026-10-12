@@ -1,0 +1,62 @@
+name: Bug report
+description: Something did not work as expected
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Please do not paste chat contents, emails or tokens.
+        `ccswitch doctor` prints paths and counts only.
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `ccswitch doctor`
+      description: Run `ccswitch doctor` and paste the whole output.
+      render: text
+    validations:
+      required: true
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - Linux
+        - Linux (flatpak)
+        - Linux (snap)
+        - Windows 10
+        - Windows 11
+        - macOS (Apple silicon)
+        - macOS (Intel)
+        - Other
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: ccswitch version
+      description: Output of `ccswitch version`.
+    validations:
+      required: true
+  - type: input
+    id: install
+    attributes:
+      label: How did you install it?
+      placeholder: install script, Homebrew, Scoop, winget, go install, manual
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What did you run, what did you expect, and what did you see instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checklist
+      options:
+        - label: I removed personal data (emails, tokens, chat text) from this report.
+          required: true

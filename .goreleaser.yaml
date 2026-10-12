@@ -1,0 +1,204 @@
+# GoReleaser v2 configuration for ccswitch.
+# Owner: replace "ccswitch/ccswitch" with the real GitHub org/repo before the first release.
+version: 2
+
+project_name: ccswitch
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: ccswitch
+    main: ./cmd/ccswitch
+    binary: ccswitch
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X github.com/ccswitch/ccswitch/internal/version.Version={{.Version}}
+      - -X github.com/ccswitch/ccswitch/internal/version.Commit={{.ShortCommit}}
+      - -X github.com/ccswitch/ccswitch/internal/version.Date={{.CommitDate}}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+
+archives:
+  - id: default
+    ids:
+      - ccswitch
+    formats:
+      - tar.gz
+    format_overrides:
+      - goos: windows
+        formats:
+          - zip
+    name_template: "ccswitch_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+nfpms:
+  - id: packages
+    package_name: ccswitch
+    ids:
+      - ccswitch
+    file_name_template: "ccswitch_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    vendor: ccswitch contributors
+    homepage: https://github.com/ccswitch/ccswitch
+    maintainer: ccswitch contributors <noreply@users.noreply.github.com>
+    description: Move Claude Code chats between Claude Desktop accounts safely.
+    license: MIT
+    formats:
+      - deb
+      - rpm
+      - apk
+    bindir: /usr/bin
+    contents:
+      - src: LICENSE
+        dst: /usr/share/doc/ccswitch/LICENSE
+      - src: README.md
+        dst: /usr/share/doc/ccswitch/README.md
+
+brews:
+  - name: ccswitch
+    ids:
+      - default
+    repository:
+      owner: ccswitch
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_TOKEN }}"
+    directory: Formula
+    homepage: https://github.com/ccswitch/ccswitch
+    description: Move Claude Code chats between Claude Desktop accounts safely.
+    license: MIT
+    skip_upload: auto
+    test: |
+      system "#{bin}/ccswitch", "version"
+
+scoops:
+  - name: ccswitch
+    ids:
+      - default
+    repository:
+      owner: ccswitch
+      name: scoop-bucket
+      token: "{{ .Env.SCOOP_BUCKET_TOKEN }}"
+    homepage: https://github.com/ccswitch/ccswitch
+    description: Move Claude Code chats between Claude Desktop accounts safely.
+    license: MIT
+    skip_upload: auto
+
+winget:
+  - name: ccswitch
+    publisher: ccswitch
+    package_identifier: ccswitch.ccswitch
+    short_description: Move Claude Code chats between Claude Desktop accounts safely.
+    description: >-
+      ccswitch makes Claude Code chats visible in another signed-in Claude Desktop
+      account. You pick the chats. It backs up before every write and has an undo.
+      No network access and no telemetry.
+    publisher_url: https://github.com/ccswitch
+    publisher_support_url: https://github.com/ccswitch/ccswitch/issues
+    homepage: https://github.com/ccswitch/ccswitch
+    license: MIT
+    license_url: https://github.com/ccswitch/ccswitch/blob/main/LICENSE
+    release_notes_url: https://github.com/ccswitch/ccswitch/releases/tag/{{ .Tag }}
+    tags:
+      - claude
+      - claude-code
+      - cli
+      - tui
+    ids:
+      - default
+    repository:
+      owner: ccswitch
+      name: winget-pkgs
+      branch: "ccswitch-{{ .Version }}"
+      token: "{{ .Env.WINGET_PKGS_TOKEN }}"
+      pull_request:
+        enabled: true
+        draft: false
+        base:
+          owner: microsoft
+          name: winget-pkgs
+          branch: master
+    skip_upload: auto
+
+aurs:
+  - name: ccswitch-bin
+    ids:
+      - default
+    homepage: https://github.com/ccswitch/ccswitch
+    description: Move Claude Code chats between Claude Desktop accounts safely.
+    license: MIT
+    maintainers:
+      - "ccswitch contributors <noreply@users.noreply.github.com>"
+    private_key: "{{ .Env.AUR_KEY }}"
+    git_url: "ssh://aur@aur.archlinux.org/ccswitch-bin.git"
+    provides:
+      - ccswitch
+    conflicts:
+      - ccswitch
+    skip_upload: auto
+    package: |-
+      install -Dm755 "./ccswitch" "${pkgdir}/usr/bin/ccswitch"
+      install -Dm644 "./LICENSE" "${pkgdir}/usr/share/licenses/ccswitch-bin/LICENSE"
+
+changelog:
+  sort: asc
+  use: github
+  groups:
+    - title: Features
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 0
+    - title: Bug fixes
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: Performance
+      regexp: '^.*?perf(\([[:word:]]+\))??!?:.+$'
+      order: 2
+    - title: Refactoring
+      regexp: '^.*?refactor(\([[:word:]]+\))??!?:.+$'
+      order: 3
+    - title: Other changes
+      order: 999
+  filters:
+    exclude:
+      - '^docs(\([[:word:]]+\))??!?:'
+      - '^test(\([[:word:]]+\))??!?:'
+      - '^chore(\([[:word:]]+\))??!?:'
+
+release:
+  github:
+    owner: ccswitch
+    name: ccswitch
+  draft: false
+  prerelease: auto
+  header: |
+    ## ccswitch {{ .Tag }}
+
+    Verify your download against `checksums.txt` (SHA-256) before running it.
+    The install scripts do this for you.
+  footer: |
+    ---
+
+    **Privacy:** ccswitch makes no network requests and sends no telemetry.
+    It reads and writes only your local Claude data folders and its own
+    config and backup folder. It backs up every file before changing it,
+    and `ccswitch undo` restores the last backup.

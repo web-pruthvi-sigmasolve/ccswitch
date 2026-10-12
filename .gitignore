@@ -1,0 +1,14 @@
+# Build output
+dist/
+*.exe
+/ccswitch
+
+# Test and coverage
+coverage.out
+*.test
+
+# Editors
+.idea/
+.vscode/
+*.swp
+.DS_Store
