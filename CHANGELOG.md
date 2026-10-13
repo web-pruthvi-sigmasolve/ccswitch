@@ -7,6 +7,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-10-13
+
 ### Fixed
 
 - TUI: `enter` on a project header now goes to Review as the help bar says; `space` toggles the whole project.
@@ -69,7 +71,8 @@ and this project follows [Semantic Versioning](https://semver.org/).
   deb, rpm and apk packages.
 - No network access and no telemetry.
 
-[Unreleased]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.1.1...v0.2.0
 [0.1.1]: https://github.com/web-pruthvi-sigmasolve/ccswitch/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/web-pruthvi-sigmasolve/ccswitch/releases/tag/v0.1.0
