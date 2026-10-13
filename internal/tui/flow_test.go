@@ -55,14 +55,14 @@ func TestPickToggleSelectAllNoneAndCollapse(t *testing.T) {
 	if len(m.sh.selected) != 0 {
 		t.Error("n should clear")
 	}
-	// enter on the header toggles the whole group; space does too.
-	m = press(t, m, "up", "enter")
+	// space on the header toggles the whole group.
+	m = press(t, m, "up", "space")
 	if len(m.sh.selected) != 3 {
 		t.Errorf("group select: %v", m.sh.selected)
 	}
-	m = press(t, m, "enter")
+	m = press(t, m, "space")
 	if len(m.sh.selected) != 0 {
-		t.Error("second enter should unselect the group")
+		t.Error("second space should unselect the group")
 	}
 	// p collapses the group and the cursor lands on its header.
 	m = press(t, m, "down", "p")
@@ -182,6 +182,21 @@ func TestPickEnterNeedsSelection(t *testing.T) {
 	m := press(t, toPick(t, newFixture(t).model(t)), "down", "enter")
 	if _, ok := m.cur.(*pickScreen); !ok || !strings.Contains(m.View(), "Select at least one") {
 		t.Errorf("expected a hint:\n%s", m.View())
+	}
+}
+
+func TestPickEnterOnHeaderIsNext(t *testing.T) {
+	m := toPick(t, newFixture(t).model(t))
+	if p := m.cur.(*pickScreen); p.rows[p.cursor].e != nil {
+		t.Fatal("cursor should start on a project header")
+	}
+	m = press(t, m, "enter")
+	if _, ok := m.cur.(*pickScreen); !ok || len(m.sh.selected) != 0 || !strings.Contains(m.View(), "Select at least one") {
+		t.Errorf("enter on header with nothing selected must stay on Pick with a notice:\n%s", m.View())
+	}
+	m = press(t, m, "space", "enter")
+	if _, ok := m.cur.(*reviewScreen); !ok {
+		t.Errorf("enter on header with a selection must go to Review, got %T", m.cur)
 	}
 }
 

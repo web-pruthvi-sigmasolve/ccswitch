@@ -247,8 +247,6 @@ func (s *pickScreen) Update(msg tea.Msg) (screen, tea.Cmd) {
 		return s, goTo(d)
 	case "enter":
 		switch {
-		case cur.g != nil && cur.e == nil:
-			s.toggleGroup(cur.matched)
 		case len(s.sh.selected) == 0:
 			s.notice = "Select at least one chat first (space)."
 		default:

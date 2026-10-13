@@ -7,6 +7,10 @@ and this project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- TUI: `enter` on a project header now goes to Review as the help bar says; `space` toggles the whole project.
+
 ## [0.2.0] - 2026-10-13
 
 ### Added

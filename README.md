@@ -118,7 +118,7 @@ Run `ccswitch` with no arguments in a terminal.
 
 1. **Accounts.** Pick the account to copy from. Press `l` to give an account a name.
 2. **Direction.** Pick the account to copy to.
-3. **Pick chats.** Chats are grouped by project. Move with the arrow keys or `j`/`k` (`pgup`/`pgdn` for pages). `space` toggles a chat, or a whole project when the cursor is on its header. `a` selects every chat that matches the filter, `n` clears them, `/` filters by title or project, `p` collapses a project, `tab`/`shift+tab` jump between projects. `c` cycles what happens to a chat whose copy in the destination is newer: the default policy, keep the destination, use the source.
+3. **Pick chats.** Chats are grouped by project. Move with the arrow keys or `j`/`k` (`pgup`/`pgdn` for pages). `space` toggles a chat, or a whole project when the cursor is on its header. `enter` goes to the next step (Review) wherever the cursor is, once at least one chat is selected. `a` selects every chat that matches the filter, `n` clears them, `/` filters by title or project, `p` collapses a project, `tab`/`shift+tab` jump between projects. `c` cycles what happens to a chat whose copy in the destination is newer: the default policy, keep the destination, use the source.
 4. **Review.** This is a dry run. You see what will be added, merged or kept, and where the backup goes. Nothing is written yet. `m` cycles the mode (merge, overwrite, add-only), `c` the conflict policy (keep-dest, prefer-source, skip), `o` includes chats whose transcript is missing, `s` shows the skipped ones. Press `enter` to apply.
 5. **Done.** Switch account in Claude Desktop (or restart it) to refresh the sidebar. Press `r` to start again.
 

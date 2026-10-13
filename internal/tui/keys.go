@@ -14,7 +14,7 @@ var (
 	keyQuit     = key.NewBinding(key.WithKeys("q", "ctrl+c"), key.WithHelp("q", "quit"))
 	keyHelp     = key.NewBinding(key.WithKeys("?"), key.WithHelp("?", "help"))
 	keyLabel    = key.NewBinding(key.WithKeys("l"), key.WithHelp("l", "label"))
-	keyToggle   = key.NewBinding(key.WithKeys(" "), key.WithHelp("space", "toggle"))
+	keyToggle   = key.NewBinding(key.WithKeys(" "), key.WithHelp("space", "toggle chat/project"))
 	keyAll      = key.NewBinding(key.WithKeys("a"), key.WithHelp("a", "all"))
 	keyNone     = key.NewBinding(key.WithKeys("n"), key.WithHelp("n", "none"))
 	keyFilter   = key.NewBinding(key.WithKeys("/"), key.WithHelp("/", "filter"))
